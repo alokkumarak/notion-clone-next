@@ -1,12 +1,28 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import { api } from "@/convex/_generated/api";
 import { useUser } from "@clerk/clerk-react";
+import { useMutation } from "convex/react";
 import { PlusCircleIcon } from "lucide-react";
 import Image from "next/image";
+import { toast } from "sonner";
 
-const page = () => {
+const DocumentPage = () => {
   const { user } = useUser();
+  const create = useMutation(api.documents.create);
+
+  const onCreate = () => {
+    const promise = create({
+      title: "Untitled",
+    });
+
+    toast.promise(promise, {
+      loading: "Creating document...",
+      success: "Document created",
+      error: "Failed to create a new document",
+    });
+  };
 
   return (
     <>
@@ -28,7 +44,7 @@ const page = () => {
         <h1 className="text-lg font-medium">
           Welcome to {user?.username}&apos;s Notion Docs
         </h1>
-        <Button>
+        <Button onClick={onCreate}>
           <PlusCircleIcon className="h-6 w-6 mr-2" />
           Create Doc
         </Button>
@@ -37,4 +53,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default DocumentPage;
