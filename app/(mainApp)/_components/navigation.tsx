@@ -10,7 +10,7 @@ import {
   Settings,
   Trash,
 } from "lucide-react";
-import { usePathname } from "next/navigation";
+import { useParams, usePathname } from "next/navigation";
 import { ElementRef, useEffect, useRef, useState } from "react";
 import { useMediaQuery } from "usehooks-ts";
 import UserItem from "./userItem";
@@ -26,8 +26,11 @@ import {
 } from "@/components/ui/popover";
 import TrashBox from "./trashBox";
 import { useSearch } from "@/hooks/use-search";
+import { useSettings } from "@/hooks/use-settings";
+import NavbarDocument from "./navbarDocument";
 
 const Navigation = () => {
+  const params = useParams();
   const isMobile = useMediaQuery("(max-width: 768px)");
   const pathname = usePathname();
   const isResizingRef = useRef(false);
@@ -39,6 +42,8 @@ const Navigation = () => {
   const create = useMutation(api.documents.create);
 
   const search = useSearch();
+  const settings = useSettings();
+
   const handleMouseDown = (
     event: React.MouseEvent<HTMLDivElement, MouseEvent>,
   ) => {
@@ -144,7 +149,7 @@ const Navigation = () => {
         <div>
           <UserItem />
           <Item onClick={search.onOpen} isSearch label="Search" icon={Search} />
-          <Item onClick={() => {}} label="Settings" icon={Settings} />
+          <Item onClick={settings.onOpen} label="Settings" icon={Settings} />
           <Item onClick={handleCreate} icon={PlusCircle} label="New Page" />
         </div>
         <div className="mt-4">
@@ -177,15 +182,19 @@ const Navigation = () => {
           isMobile && "left-0 w-full",
         )}
       >
-        <nav className="bg-transparent px-3 py-2 w-full">
-          {isCollapsed && (
-            <MenuIcon
-              onClick={resetWidth}
-              className="h-6 w-6 text-muted-foreground"
-              role="button"
-            />
-          )}
-        </nav>
+        {!!params.documentId ? (
+          <NavbarDocument isCollapsed={isCollapsed} onResetWidth={resetWidth} />
+        ) : (
+          <nav className="bg-transparent px-3 py-2 w-full">
+            {isCollapsed && (
+              <MenuIcon
+                onClick={resetWidth}
+                className="h-6 w-6 text-muted-foreground"
+                role="button"
+              />
+            )}
+          </nav>
+        )}
       </div>
     </>
   );
