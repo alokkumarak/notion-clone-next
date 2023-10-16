@@ -69,7 +69,7 @@ const Item = ({
       if (!expended) {
         onExpend?.();
       }
-      //   router.push(`/documents/${docId}`);
+      router.push(`/documents/${docId}`);
     });
 
     toast.promise(promise, {
@@ -109,7 +109,7 @@ const Item = ({
         <div
           role="button"
           onClick={handleExpand}
-          className="h-full rounded-sm hover:bg-neutral-300 dark:hover:bg-neutral-600 mr-1"
+          className="h-full rounded-sm hover:bg-neutral-300 dark:hover:bg-neutral-600 mr-1 ml-3"
         >
           <ChevronIcon className="h-4 w-4 shrink-0 text-muted-foreground/50" />
         </div>
@@ -117,7 +117,7 @@ const Item = ({
       {documentIcon ? (
         <div className="shrink-0 text-[18px] mr-2">{documentIcon}</div>
       ) : (
-        <Icon className="shrink-0 h-[18px] mr-2" />
+        <Icon className="shrink-0 h-[18px] w-[18px] mr-2" />
       )}
       <span className="truncate">{label}</span>
       {isSearch && (
